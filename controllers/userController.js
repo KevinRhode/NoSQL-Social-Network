@@ -10,11 +10,17 @@ module.exports = {
         });
     },
     getSingleUser(req,res){
-        User.find()
+        User.findOne()
         .then((users)=>res.json(users))
         .catch((err) => {
             console.error({message:err});
             return res.status(500).json(err);
         });
     },
+    createUser(req, res){
+        User.create(req.body)
+        .then((user) => res.json(user))
+        .catch((err) => res.status(500).json(err));
+    
+    }   
 };
