@@ -21,8 +21,17 @@ const userSchema = new Schema(
                 message: props => `${props.value} is not a valid phone number!`
             },
         },
-        thoughts: [thoughtSchema],
-        friends:[this],
+        thoughts: [
+            {
+                type:Schema.Types.ObjectId,
+                ref:'Thought'
+            }
+        ],
+        friends:[  
+            {
+                type:Schema.Types.ObjectId,
+                ref:'User'
+            }],
     },
     {
         toJSON:{
@@ -31,10 +40,9 @@ const userSchema = new Schema(
         id:false,
     }
 );
-const friendCount = userSchema.virtual('friendCount');
-//todo 
 
+userSchema.virtual('friendCount').get(function () {return this.friends.length});
 
-const User = model('user',userSchema);
+const User = model('User',userSchema);
 
 module.exports = User;
