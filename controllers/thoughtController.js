@@ -78,16 +78,15 @@ module.exports = {
   },
   // Remove reaction tag.
   removeReaction(req, res) {
-    Thought.findOneAndUpdate(
-      { _id: req.params.thoughtId },
-      { $pull: { reactions: { reactionId: req.params.reactionId } } },
-      { runValidators: true, new: true }
+    Thought.findOne(
+      { _id: req.params.thoughtId }
     )
-      .then((thought) =>
-        !thought
-          ? res.status(404).json({ message: 'No thought with this id!' })
-          : res.json(thought)
-      )
+      .then((thought) =>{
+            thought.reactions.splice(thought.reactions.indexOf(req.params.reactionId),1);   //removes the Friends Id     
+            thought.save(); // Saves the changes
+            return res.status(200).json(thought);   
+          })
+      
       .catch((err) => res.status(500).json(err));
   },
 };
