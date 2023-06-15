@@ -3,8 +3,8 @@ const { User, Thought } = require("../models");
 module.exports = {
   getThoughts(req, res) {
     Thought.find()
-      .populate({ path: 'reactions', select: '-__v' })
-      .then((users) => res.json(users))
+      .populate({ path: 'reactions', select: '-__v' }) // get reactions for the thought
+      .then((thoughts) => res.json(thoughts))
       .catch((err) => {
         console.error({ message: err });
         return res.status(500).json(err);
@@ -12,8 +12,8 @@ module.exports = {
   },
   getSingleThought(req, res) {
     Thought.findOne()
-    .populate({ path: 'reactions', select: '-__v' })
-      .then((users) => res.json(users))
+    .populate({ path: 'reactions', select: '-__v' }) // get reactions for the thought
+      .then((thoughts) => res.json(thoughts))
       .catch((err) => {
         console.error({ message: err });
         return res.status(500).json(err);
@@ -21,41 +21,41 @@ module.exports = {
   },
   createThought(req, res) {
     Thought.create(req.body)
-      .then((user) => res.json(user))
+      .then(async (thought) => {
+         return User.findOneAndUpdate(
+          {_id: req.body.userId},
+          {$push:{thoughts:thought._id}},
+          {new:true}
+        ) 
+        .then((User)=>{
+          res.json({thought:thought.toObject(),User});
+        })
+       
+        
+      })
       .catch((err) => res.status(500).json(err));
   },
   // Update a Thought
   updateThought(req, res) {
     Thought.findOneAndUpdate(
-      { _id: req.params.userId },
+      { _id: req.params.thoughtId },
       { $set: req.body },
       { runValidators: true, new: true }
     )
-      .then((user) =>
-        !user
-          ? res.status(404).json({ message: "No user with this id!" })
-          : res.json(user)
+      .then((thought) =>
+        !thought
+          ? res.status(404).json({ message: "No thought with this id!" })
+          : res.json(thought)
       )
       .catch((err) => res.status(500).json(err));
   },
-  // Delete a user and remove them from the course
+  // Delete a thought and remove them from the course
   deleteThought(req, res) {
-    Thought.findOneAndRemove({ _id: req.params.userId })
-      .then((user) =>
-        !user
-          ? res.status(404).json({ message: "No such user exists" })
-          : Thought.find(
-              { users: req.params.userId },
-              { $pull: { users: req.params.userId } },
-              { new: true }
-            )
-      )
+    Thought.findOneAndRemove({ _id: req.params.thoughtId })
       .then((thought) =>
         !thought
-          ? res.status(404).json({
-              message: "User deleted, but no thoughts found",
-            })
-          : res.json({ message: "User successfully deleted" })
+          ? res.status(404).json({ message: "No such thought exists" })
+          : res.json({ message: "thought successfully deleted" })
       )
       .catch((err) => {
         console.log(err);
