@@ -1,30 +1,30 @@
 const { User, Thought } = require("../models");
 
 module.exports = {
-  getUsers(req, res) {
-    User.find()
-      .then((user) => res.json(user))
-      .catch((err) => {
-        console.error({ message: err });
-        return res.status(500).json(err);
-      });
-  },
-  getSingleUser(req, res) {
-    User.findOne({ _id: req.params.userId })
+  getThoughts(req, res) {
+    Thought.find()
       .then((users) => res.json(users))
       .catch((err) => {
         console.error({ message: err });
         return res.status(500).json(err);
       });
   },
-  createUser(req, res) {
-    User.create(req.body)
+  getSingleThought(req, res) {
+    Thought.findOne()
+      .then((users) => res.json(users))
+      .catch((err) => {
+        console.error({ message: err });
+        return res.status(500).json(err);
+      });
+  },
+  createThought(req, res) {
+    Thought.create(req.body)
       .then((user) => res.json(user))
       .catch((err) => res.status(500).json(err));
   },
-  // Update a User
-  updateUser(req, res) {
-    User.findOneAndUpdate(
+  // Update a Thought
+  updateThought(req, res) {
+    Thought.findOneAndUpdate(
       { _id: req.params.userId },
       { $set: req.body },
       { runValidators: true, new: true }
@@ -37,8 +37,8 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
   // Delete a user and remove them from the course
-  deleteUser(req, res) {
-    User.findOneAndRemove({ _id: req.params.userId })
+  deleteThought(req, res) {
+    Thought.findOneAndRemove({ _id: req.params.userId })
       .then((user) =>
         !user
           ? res.status(404).json({ message: "No such user exists" })
@@ -58,31 +58,6 @@ module.exports = {
       .catch((err) => {
         console.log(err);
         res.status(500).json(err);
-      });
-  },
-  addFriend(req, res) {
-    User.findOne({ _id: req.params.userId })
-      .then((user) => {
-        user.friends.push(req.params.friendId);
-        user.save();
-        return res.status(200).json(user);
-      })
-      
-      .catch((err) => {
-        console.error({ message: err });
-        return res.status(500).json(err);
-      });
-  },
-  removeFriend(req, res) {
-    User.findOne({ _id: req.params.userId })
-      .then((user) => {
-        user.friends.splice(user.friends.indexOf(req.params.userId),1);   //removes the Friends Id     
-        user.save(); // Saves the changes
-        return res.status(200).json(user);        
-      })
-      .catch((err) => {
-        console.error({ message: err });
-        return res.status(500).json(err);
       });
   },
 };
