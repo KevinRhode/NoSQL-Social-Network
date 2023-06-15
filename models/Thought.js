@@ -4,10 +4,7 @@ const { formatedCreatedAt } = require("../utils/helpers");
 
 //schema to create subdoc reactions
 const reactionSchema = new Schema({
-  reactionId: {
-    type: Schema.Types.ObjectId,
-    default: () => new Types.ObjectId(),
-  },
+
   reactionBody: {
     type: String,
     required: true,
