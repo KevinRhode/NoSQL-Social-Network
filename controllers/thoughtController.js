@@ -3,6 +3,7 @@ const { User, Thought } = require("../models");
 module.exports = {
   getThoughts(req, res) {
     Thought.find()
+      .populate({ path: 'reactions', select: '-__v' })
       .then((users) => res.json(users))
       .catch((err) => {
         console.error({ message: err });
@@ -11,6 +12,7 @@ module.exports = {
   },
   getSingleThought(req, res) {
     Thought.findOne()
+    .populate({ path: 'reactions', select: '-__v' })
       .then((users) => res.json(users))
       .catch((err) => {
         console.error({ message: err });
@@ -59,5 +61,33 @@ module.exports = {
         console.log(err);
         res.status(500).json(err);
       });
+  },
+   // Adds a reaction
+   addReaction(req, res) {
+    Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $addToSet: { reactions: req.body } },
+      { runValidators: true, new: true }
+    )
+      .then((thought) =>
+        !thought
+          ? res.status(404).json({ message: 'No thought with this id!' })
+          : res.json(thought)
+      )
+      .catch((err) => res.status(500).json(err));
+  },
+  // Remove reaction tag.
+  removeReaction(req, res) {
+    Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $pull: { reactions: { reactionId: req.params.reactionId } } },
+      { runValidators: true, new: true }
+    )
+      .then((thought) =>
+        !thought
+          ? res.status(404).json({ message: 'No thought with this id!' })
+          : res.json(thought)
+      )
+      .catch((err) => res.status(500).json(err));
   },
 };
