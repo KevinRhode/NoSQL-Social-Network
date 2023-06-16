@@ -11,7 +11,7 @@ module.exports = {
       });
   },
   getSingleThought(req, res) {
-    Thought.findOne()
+    Thought.findOne({_id:req.params.thoughtId})
     .populate({ path: 'reactions', select: '-__v' }) // get reactions for the thought
       .then((thoughts) => res.json(thoughts))
       .catch((err) => {
