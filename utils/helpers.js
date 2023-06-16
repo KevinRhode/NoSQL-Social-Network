@@ -9,8 +9,8 @@ module.exports = {
 
     // Get the day with the correct suffix
     const day = rawDate.getDate();
-    const suffix = getDaySuffix(day);
-    const formattedDay = day + suffix;
+    // const suffix = getDaySuffix(day);
+    // const formattedDay = day + suffix;
 
     // Get the hour in 12-hour format
     const hour = rawDate.getHours() % 12 || 12;
@@ -22,6 +22,6 @@ module.exports = {
     const amPm = rawDate.getHours() >= 12 ? "pm" : "am";
 
     // Construct the formatted rawDate string
-    return `${monthAbbreviation}, ${formattedDay} ${rawDate.getFullYear()} at ${hour}:${minutes}${amPm}`;
+    return `${monthAbbreviation}, ${day} ${rawDate.getFullYear()} at ${hour}:${minutes}${amPm}`;
   },
 };

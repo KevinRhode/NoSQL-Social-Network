@@ -9,18 +9,18 @@ const {
   removeReaction
 } = require('../../controllers/thoughtController.js');
 
-router.route('/').get(getThoughts);
+router.route('/').get(getThoughts);//get many
 
-router.route('/:thoughtId').get(getSingleThought);
+router.route('/:thoughtId').get(getSingleThought);//get single
 
-router.route('/').post(createThought);
+router.route('/').post(createThought);//create thought
 
-router.route('/:thoughtId').put(updateThought);
+router.route('/:thoughtId').put(updateThought);//update thought
 
-router.route('/:thoughtId').delete(deleteThought);
+router.route('/:thoughtId').delete(deleteThought); //delete thought
 
-router.route('/:thoughtId/reactions').post(addReaction);
+router.route('/:thoughtId/reactions').post(addReaction); //add reaction to thought
 
-router.route('/:thoughtId/reactions/:reactionId').delete(removeReaction);
+router.route('/:thoughtId/reactions/:reactionId').delete(removeReaction); //delete reaction from thought by reaction id
 
 module.exports = router;

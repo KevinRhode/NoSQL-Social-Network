@@ -20,6 +20,11 @@ const reactionSchema = new Schema({
     default: Date.now,
     get: formatedCreatedAt,
   },
+},
+{
+  toJSON: {
+    getters:true,
+  },
 });
 //schema to create thought model
 const thoughtSchema = new Schema(
@@ -49,6 +54,7 @@ const thoughtSchema = new Schema(
   {
     toJSON: {
       virtuals: true,
+      getters:true,
     },
     id: false,
   }
