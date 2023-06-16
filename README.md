@@ -62,4 +62,5 @@ After which your localhost should now have it running on PORT 3001
 
 ![Photo of Insomnia with info populated](info-nosql.PNG)
 
-![]()
+
+https://github.com/KevinRhode/NoSQL-Social-Network/assets/77312186/deefb289-45bb-4c00-8fb1-39cb264cd3e7
