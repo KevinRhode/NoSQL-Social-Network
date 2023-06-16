@@ -55,7 +55,7 @@ To run the application use:
 ```
 After which your localhost should now have it running on PORT 3001
 
-[Application Guide](https://drive.google.com/file/d/1x2VxXF8SneZ5ghTh81dYrSFzIv6iu3IW/view)  
+[Application Guide](https://drive.google.com/file/d/11y2gU_uNqeJbqw61wVoaogaU-faV4oQh/view)  
 [Application Repo](https://github.com/KevinRhode/NoSQL-Social-Network)
 
 ## Preview
