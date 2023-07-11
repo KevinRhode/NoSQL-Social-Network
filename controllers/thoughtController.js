@@ -3,7 +3,7 @@ const { User, Thought } = require("../models");
 module.exports = {
   getThoughts(req, res) {
     Thought.find()
-      .populate({ path: 'reactions', select: '-__v' }) // get reactions for the thought
+      .populate({ path: "reactions", select: "-__v" }) // get reactions for the thought
       .then((thoughts) => res.json(thoughts))
       .catch((err) => {
         console.error({ message: err });
@@ -11,8 +11,8 @@ module.exports = {
       });
   },
   getSingleThought(req, res) {
-    Thought.findOne({_id:req.params.thoughtId})
-    .populate({ path: 'reactions', select: '-__v' }) // get reactions for the thought
+    Thought.findOne({ _id: req.params.thoughtId })
+      .populate({ path: "reactions", select: "-__v" }) // get reactions for the thought
       .then((thoughts) => res.json(thoughts))
       .catch((err) => {
         console.error({ message: err });
@@ -22,16 +22,13 @@ module.exports = {
   createThought(req, res) {
     Thought.create(req.body)
       .then(async (thought) => {
-         return User.findOneAndUpdate(
-          {_id: req.body.userId},
-          {$push:{thoughts:thought._id}},
-          {new:true}
-        ) 
-        .then((User)=>{
-          res.json({thought:thought.toObject(),User});
-        })
-       
-        
+        return User.findOneAndUpdate(
+          { _id: req.body.userId },
+          { $push: { thoughts: thought._id } },
+          { new: true }
+        ).then((User) => {
+          res.json({ thought: thought.toObject(), User });
+        });
       })
       .catch((err) => res.status(500).json(err));
   },
@@ -62,8 +59,8 @@ module.exports = {
         res.status(500).json(err);
       });
   },
-   // Adds a reaction
-   addReaction(req, res) {
+  // Adds a reaction
+  addReaction(req, res) {
     Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
       { $addToSet: { reactions: req.body } },
@@ -71,22 +68,23 @@ module.exports = {
     )
       .then((thought) =>
         !thought
-          ? res.status(404).json({ message: 'No thought with this id!' })
+          ? res.status(404).json({ message: "No thought with this id!" })
           : res.json(thought)
       )
       .catch((err) => res.status(500).json(err));
   },
   // Remove reaction tag.
   removeReaction(req, res) {
-    Thought.findOne(
-      { _id: req.params.thoughtId }
-    )
-      .then((thought) =>{
-            thought.reactions.splice(thought.reactions.indexOf(req.params.reactionId),1);   //removes the Friends Id     
-            thought.save(); // Saves the changes
-            return res.status(200).json(thought);   
-          })
-      
+    Thought.findOne({ _id: req.params.thoughtId })
+      .then((thought) => {
+        thought.reactions.splice(
+          thought.reactions.indexOf(req.params.reactionId),
+          1
+        ); //removes the Friends Id
+        thought.save(); // Saves the changes
+        return res.status(200).json(thought);
+      })
+
       .catch((err) => res.status(500).json(err));
   },
 };
